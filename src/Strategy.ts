@@ -1,6 +1,5 @@
 import OAuth2Strategy, {
   StrategyOptions as OAuth2StrategyOptions,
-  VerifyCallback,
   InternalOAuthError,
 } from "passport-oauth2";
 import passport from "passport";
@@ -16,21 +15,17 @@ export interface Profile extends passport.Profile {
   _json: any;
 }
 
-type VerifyFunction =
-  | ((
-      accessToken: string,
-      refreshToken: string,
-      profile: Profile,
-      verified: OAuth2Strategy.VerifyCallback
-    ) => void)
-  | ((
-      accessToken: string,
-      refreshToken: string,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      results: any,
-      profile: Profile,
-      verified: OAuth2Strategy.VerifyCallback
-    ) => void);
+type VerifyCallback = (
+  err?: Error | null | undefined,
+  user?: Profile | undefined
+) => void;
+
+type VerifyFunction = (
+  accessToken: string,
+  refreshToken: string,
+  profile: Profile,
+  done: VerifyFunction
+) => void;
 
 export type StrategyOptions = Pick<
   OAuth2StrategyOptions,
