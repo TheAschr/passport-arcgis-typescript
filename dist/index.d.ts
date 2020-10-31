@@ -1,2 +1,2 @@
-import { Strategy } from "./Strategy";
-export { Strategy };
+import { Strategy, Profile } from "./Strategy";
+export { Strategy as OAuth2Strategy, Profile };

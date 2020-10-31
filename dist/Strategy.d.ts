@@ -11,7 +11,7 @@ export interface Profile extends passport.Profile {
 }
 declare type VerifyFunction = ((accessToken: string, refreshToken: string, profile: Profile, verified: OAuth2Strategy.VerifyCallback) => void) | ((accessToken: string, refreshToken: string, results: any, profile: Profile, verified: OAuth2Strategy.VerifyCallback) => void);
 export interface StrategyOptions extends Pick<OAuth2StrategyOptions, "clientID" | "clientSecret" | "callbackURL"> {
-    scope: StrategyScope[];
+    scope?: StrategyScope | StrategyScope[] | undefined;
 }
 export declare class Strategy extends OAuth2Strategy {
     private readonly _userProfileURL;
