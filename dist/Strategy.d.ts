@@ -9,7 +9,7 @@ export interface Profile extends passport.Profile {
     _json: any;
 }
 declare type VerifyCallback = (err?: Error | null | undefined, user?: Profile | undefined) => void;
-declare type VerifyFunction = (accessToken: string, refreshToken: string, profile: Profile, done: VerifyFunction) => void;
+declare type VerifyFunction = (accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) => void;
 export declare type StrategyOptions = Pick<OAuth2StrategyOptions, "clientID" | "clientSecret" | "callbackURL">;
 export declare class Strategy extends OAuth2Strategy {
     private readonly _userProfileURL;

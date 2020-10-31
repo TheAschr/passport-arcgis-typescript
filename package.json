@@ -1,6 +1,6 @@
 {
   "name": "passport-arcgis-typescript",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "ArcGIS (OAuth 2.0) authentication strategy for Passport.",
   "main": "./dist",
   "scripts": {
