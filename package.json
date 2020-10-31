@@ -1,0 +1,35 @@
+{
+  "name": "passport-arcgis-typescript",
+  "version": "1.0.0",
+  "description": "ArcGIS (OAuth 2.0) authentication strategy for Passport.",
+  "main": "./dist",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "lint": "eslint src/**/*.ts --quiet --fix",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run lint && git add -A src && npm run build && git add -A dist",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": [],
+  "author": "Alexander Schrimpf",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.14.6",
+    "@types/passport-oauth2": "^1.4.9",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "passport-oauth2": "^1.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TheAschr/passport-arcgis-typescript.git"
+  }
+}

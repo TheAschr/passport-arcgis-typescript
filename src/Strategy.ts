@@ -1,0 +1,100 @@
+import OAuth2Strategy, {
+  StrategyOptions as OAuth2StrategyOptions,
+  VerifyCallback,
+  InternalOAuthError,
+} from "passport-oauth2";
+import passport from "passport";
+
+export type StrategyScope = "user" | "public_repo" | "repo" | "gist";
+
+// Api Documentation - https://developers.arcgis.com/rest/users-groups-and-items/portal-self.htm
+
+export interface Profile extends passport.Profile {
+  orgId: string;
+  fullname: string;
+  role: "org_admin" | "org_publisher" | "org_user";
+  _raw: string | Buffer | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _json: any;
+}
+
+type VerifyFunction =
+  | ((
+      accessToken: string,
+      refreshToken: string,
+      profile: Profile,
+      verified: OAuth2Strategy.VerifyCallback
+    ) => void)
+  | ((
+      accessToken: string,
+      refreshToken: string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      results: any,
+      profile: Profile,
+      verified: OAuth2Strategy.VerifyCallback
+    ) => void);
+
+export interface StrategyOptions
+  extends Pick<
+    OAuth2StrategyOptions,
+    "clientID" | "clientSecret" | "callbackURL"
+  > {
+  scope: StrategyScope[];
+}
+
+export class Strategy extends OAuth2Strategy {
+  private readonly _userProfileURL: string =
+    "https://www.arcgis.com/sharing/rest/community/self?f=json";
+
+  constructor(options: StrategyOptions, verify: VerifyFunction) {
+    super(
+      {
+        tokenURL: "https://www.arcgis.com/sharing/oauth2/token",
+        authorizationURL: "https://www.arcgis.com/sharing/oauth2/authorize",
+        ...options,
+      },
+      verify
+    );
+    this.name = "arcgis";
+  }
+
+  public userProfile(accessToken: string, done: VerifyCallback) {
+    this._oauth2.get(this._userProfileURL, accessToken, function (err, body) {
+      if (err) {
+        return done(
+          new InternalOAuthError("failed to fetch user profile", err)
+        );
+      }
+
+      if (typeof body !== "string") {
+        return done(
+          new InternalOAuthError(
+            `got a response body of type ${typeof body}. Expected type 'string'`,
+            err
+          )
+        );
+      }
+
+      try {
+        const json = JSON.parse(body);
+
+        const profile: Profile = {
+          provider: "arcgis",
+          id: json.username,
+          displayName: json.fullName,
+          fullname: json.fullName,
+          username: json.username,
+          orgId: json.orgId,
+          emails: [{ value: json.email }],
+          role: json.role,
+          _json: json,
+          _raw: body,
+        };
+
+        done(null, profile);
+      } catch (err) {
+        done(err);
+      }
+    });
+  }
+}
