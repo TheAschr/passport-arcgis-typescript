@@ -5,8 +5,6 @@ import OAuth2Strategy, {
 } from "passport-oauth2";
 import passport from "passport";
 
-export type StrategyScope = "user" | "public_repo" | "repo" | "gist";
-
 // Api Documentation - https://developers.arcgis.com/rest/users-groups-and-items/portal-self.htm
 
 export interface Profile extends passport.Profile {
@@ -34,13 +32,10 @@ type VerifyFunction =
       verified: OAuth2Strategy.VerifyCallback
     ) => void);
 
-export interface StrategyOptions
-  extends Pick<
-    OAuth2StrategyOptions,
-    "clientID" | "clientSecret" | "callbackURL"
-  > {
-  scope?: StrategyScope | StrategyScope[] | undefined;
-}
+export type StrategyOptions = Pick<
+  OAuth2StrategyOptions,
+  "clientID" | "clientSecret" | "callbackURL"
+>;
 
 export class Strategy extends OAuth2Strategy {
   private readonly _userProfileURL: string =
