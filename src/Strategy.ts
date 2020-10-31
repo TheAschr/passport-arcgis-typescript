@@ -39,7 +39,7 @@ export interface StrategyOptions
     OAuth2StrategyOptions,
     "clientID" | "clientSecret" | "callbackURL"
   > {
-  scope: StrategyScope[];
+  scope?: StrategyScope | StrategyScope[] | undefined;
 }
 
 export class Strategy extends OAuth2Strategy {
