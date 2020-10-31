@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import OAuth2Strategy, { StrategyOptions as OAuth2StrategyOptions, VerifyCallback } from "passport-oauth2";
+import OAuth2Strategy, { StrategyOptions as OAuth2StrategyOptions } from "passport-oauth2";
 import passport from "passport";
 export interface Profile extends passport.Profile {
     orgId: string;
@@ -8,7 +8,8 @@ export interface Profile extends passport.Profile {
     _raw: string | Buffer | undefined;
     _json: any;
 }
-declare type VerifyFunction = ((accessToken: string, refreshToken: string, profile: Profile, verified: OAuth2Strategy.VerifyCallback) => void) | ((accessToken: string, refreshToken: string, results: any, profile: Profile, verified: OAuth2Strategy.VerifyCallback) => void);
+declare type VerifyCallback = (err?: Error | null | undefined, user?: Profile | undefined) => void;
+declare type VerifyFunction = (accessToken: string, refreshToken: string, profile: Profile, done: VerifyFunction) => void;
 export declare type StrategyOptions = Pick<OAuth2StrategyOptions, "clientID" | "clientSecret" | "callbackURL">;
 export declare class Strategy extends OAuth2Strategy {
     private readonly _userProfileURL;
