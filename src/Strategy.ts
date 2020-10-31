@@ -24,7 +24,7 @@ type VerifyFunction = (
   accessToken: string,
   refreshToken: string,
   profile: Profile,
-  done: VerifyFunction
+  done: VerifyCallback
 ) => void;
 
 export type StrategyOptions = Pick<
